@@ -5,7 +5,7 @@ app_name: SakaiNG
 app_type: Frontend Application (Angular)
 branch: deploy-to-aws
 created: 2026-01-21T22:14:00Z
-last_updated: 2026-01-21T22:19:00Z
+last_updated: 2026-01-21T22:26:00Z
 ---
 
 # Deployment Plan: SakaiNG
@@ -29,8 +29,8 @@ Coding Agents should follow this Deployment Plan, and validate previous progress
 - [x] Step 9: Validate CDK Synth
 
 ## Phase 3: Deploy and Validate
-- [ ] Step 10: Execute CDK Deployment
-- [ ] Step 11: Validate CloudFormation Stack
+- [x] Step 10: Execute CDK Deployment
+- [x] Step 11: Validate CloudFormation Stack
 
 ## Phase 4: Update Documentation
 - [ ] Step 12: Finalize Deployment Plan
@@ -48,12 +48,13 @@ Coding Agents should follow this Deployment Plan, and validate previous progress
 - Routing: SPA (Single Page Application)
 - Lint Command: None detected
 - CDK Version: 2.1101.0
-- Deployment URL: [after completion]
-- Stack name: [after creation]
-- Distribution ID: [after creation]
-- S3 Bucket Name: [after creation]
-- CloudFront Log Bucket: [after creation]
-- S3 Log Bucket: [after creation]
+- Deployment URL: https://d1w03p1mhryfzs.cloudfront.net
+- Stack name: SakaiNGFrontend-preview-sergeyka
+- Distribution ID: E38D2QKU5VO1KA
+- S3 Bucket Name: sakaingfrontend-preview-ser-cftos3s3bucketcae9f2be-romk2clkoxhh
+- CloudFront Log Bucket: sakaingfrontend-preview-s-cftos3cloudfrontloggingb-naxt5bilenoc
+- S3 Log Bucket: sakaingfrontend-preview-s-cftos3s3loggingbucket64b-ydbj7drieev1
+- Deployment Timestamp: 2026-01-21T22:25:36Z
 
 ## Recovery Guide
 
