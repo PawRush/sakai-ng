@@ -58,9 +58,15 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 
 Deployed at: https://d1w03p1mhryfzs.cloudfront.net, using the [deploy-frontend-app] Agent Standard Operation Procedure from the [AWS MCP](https://docs.aws.amazon.com/aws-mcp/latest/userguide/what-is-mcp-server.html).
 
-Deployment command: `./scripts/deploy.sh`
+Manual deployment: `./scripts/deploy.sh`
 
-See [DEPLOYMENT.md](./DEPLOYMENT.md) for full details.
+## Pipeline
+
+Pipeline: https://us-east-1.console.aws.amazon.com/codesuite/codepipeline/pipelines/SakaiNGPipeline/view
+
+Deploy: `git push origin deploy-to-aws`
+
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for full details. Created with the [setup-pipeline] Agent Standard Operation Procedure from the [AWS MCP](https://docs.aws.amazon.com/aws-mcp/latest/userguide/what-is-mcp-server.html).
 
 ## Additional Resources
 

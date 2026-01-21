@@ -119,3 +119,84 @@ None.
 Agent: Claude Sonnet 4.5
 Progress: Complete deployment - analyzed codebase, created CDK infrastructure, deployed to AWS, validated deployment
 Status: Completed successfully
+
+### Session 2 - 2026-01-21T22:28:00Z - 2026-01-21T22:34:00Z
+Agent: Claude Sonnet 4.5
+Progress: Pipeline setup - detected infrastructure, created CDK Pipeline stack, deployed pipeline to AWS
+Status: Completed successfully
+
+---
+
+# CI/CD Pipeline Summary
+
+Your app now has automated deployments from GitHub!
+
+**Pipeline**: https://us-east-1.console.aws.amazon.com/codesuite/codepipeline/pipelines/SakaiNGPipeline/view
+
+**How it works**: Push to the `deploy-to-aws` branch → Pipeline automatically builds and deploys to production
+
+Services used: CodePipeline, CodeBuild, CodeConnections, CloudFormation, IAM
+
+## Pipeline Commands
+
+```bash
+# Trigger pipeline manually
+aws codepipeline start-pipeline-execution --name "SakaiNGPipeline"
+
+# Check pipeline status
+aws codepipeline get-pipeline-state --name "SakaiNGPipeline" --query 'stageStates[*].[stageName,latestExecution.status]' --output table
+
+# View build logs
+aws logs tail "/aws/codebuild/SakaiNGPipelineStack-Synth" --follow
+
+# Destroy pipeline
+cd infra && npm run destroy:pipeline
+```
+
+## Pipeline Stages
+
+1. **Source**: Pull from GitHub (PawRush/sakai-ng, deploy-to-aws branch)
+2. **Build (Synth)**: Install dependencies, build app, run secretlint, synthesize CDK
+3. **UpdatePipeline**: Self-mutation (if pipeline changed)
+4. **Assets**: Publish file assets to S3
+5. **Deploy**: Deploy SakaiNGFrontend-prod stack
+
+---
+
+# Pipeline Deployment Plan
+
+## Phase 1: Gather Context and Configure
+- [x] Step 0: Inform User of Execution Flow
+- [x] Step 1: Create Deployment Plan
+- [x] Step 2: Detect Existing Infrastructure
+  - [x] 2.1: Detect stacks and frontend
+  - [x] 2.2: Detect app name and git repository
+  - [x] 2.3: Determine quality checks
+  - [x] 2.4: User confirmation
+  - [x] 2.5: Use existing CodeConnection
+
+## Phase 2: Build and Deploy Pipeline
+- [x] Step 3: Create CDK Pipeline Stack
+- [x] Step 4: CDK Bootstrap
+- [x] Step 5: Deploy Pipeline
+  - [x] 5.1: Push to remote
+  - [x] 5.2: Verify CodeConnection authorization
+  - [x] 5.3: Deploy pipeline stack
+  - [x] 5.4: Trigger pipeline
+- [x] Step 6: Monitor Pipeline
+
+## Phase 3: Documentation
+- [x] Step 7: Finalize Deployment Plan
+- [x] Step 8: Update README.md
+
+## Pipeline Info
+
+- Package Manager: npm
+- CodeConnection ARN: arn:aws:codeconnections:us-east-1:126593893432:connection/c140aa0c-7407-42c9-aa4b-7c81f5faf40b
+- Repository: PawRush/sakai-ng
+- Branch: deploy-to-aws
+- Quality Checks: Secretlint only (unit tests failing, no lint script)
+- Build Output: dist/sakai-ng/browser
+- Pipeline URL: https://us-east-1.console.aws.amazon.com/codesuite/codepipeline/pipelines/SakaiNGPipeline/view
+- Pipeline ARN: arn:aws:codepipeline:us-east-1:126593893432:SakaiNGPipeline
+- Production Stack: SakaiNGFrontend-prod
