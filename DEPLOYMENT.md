@@ -14,6 +14,47 @@ created: 2026-01-30T05:25:35Z
 last_updated: 2026-01-30T05:37:00Z
 ---
 
+# Deployment Summary
+
+Your app is deployed to AWS! Preview URL: https://d11r2zxi2cfca4.cloudfront.net
+
+**Next Step: Automate Deployments**
+
+You're currently using manual deployment. To automate deployments from GitHub, ask your coding agent to set up AWS CodePipeline using an agent SOP for pipeline creation. Try: "create a pipeline using AWS SOPs"
+
+Services used: CloudFront, S3, CloudFormation, IAM
+
+Questions? Ask your Coding Agent:
+ - What resources were deployed to AWS?
+ - How do I update my deployment?
+
+## Quick Commands
+
+```bash
+# View deployment status
+aws cloudformation describe-stacks --stack-name "SakaiNGFrontend-preview-sergeyka" --query 'Stacks[0].StackStatus' --output text
+
+# Invalidate CloudFront cache
+aws cloudfront create-invalidation --distribution-id "ELB2MWAFR9VMG" --paths "/*"
+
+# View CloudFront access logs (last hour)
+aws s3 ls "s3://sakaingfrontend-preview-s-cftos3cloudfrontloggingb-2ag4o8wifqca/" --recursive | tail -20
+
+# Redeploy
+./scripts/deploy.sh
+```
+
+## Production Readiness
+
+For production deployments, consider:
+- WAF Protection: Add AWS WAF with managed rules (Core Rule Set, Known Bad Inputs) and rate limiting
+- CSP Headers: Configure Content Security Policy in CloudFront response headers (`script-src 'self'`, `frame-ancestors 'none'`)
+- Custom Domain: Set up Route 53 and ACM certificate
+- Monitoring: CloudWatch alarms for 4xx/5xx errors and CloudFront metrics
+- Auth Redirect URLs: If using an auth provider (Auth0, Supabase, Firebase, Lovable, etc.), add your CloudFront URL to allowed redirect URLs
+
+---
+
 # Deployment Plan: sakai-ng
 
 Coding Agents should follow this Deployment Plan, and validate previous progress if picking up the Deployment in a new coding session.
@@ -39,8 +80,8 @@ Coding Agents should follow this Deployment Plan, and validate previous progress
 - [x] Step 11: Validate CloudFormation Stack
 
 ## Phase 4: Update Documentation
-- [ ] Step 12: Finalize Deployment Plan
-- [ ] Step 13: Update README.md
+- [x] Step 12: Finalize Deployment Plan
+- [x] Step 13: Update README.md
 
 ## Deployment Info
 
@@ -70,5 +111,5 @@ None.
 
 ### Session 1 - 2026-01-30T05:25:35Z
 Agent: Claude Sonnet 4.5
-Progress: Completed Phase 1 and Phase 2 - CDK infrastructure created, stack validated with synth
-Next: Phase 3 - Execute CDK Deployment
+Progress: Completed all phases - Angular 20 app deployed to AWS CloudFront + S3
+Next: N/A - Deployment complete
