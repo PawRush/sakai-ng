@@ -16,13 +16,14 @@ last_updated: 2026-01-30T05:37:00Z
 
 # Deployment Summary
 
-Your app is deployed to AWS! Preview URL: https://d11r2zxi2cfca4.cloudfront.net
+Your app is deployed to AWS with automated CI/CD!
 
-**Next Step: Automate Deployments**
+**Production URL**: https://d11r2zxi2cfca4.cloudfront.net (preview environment)
+**Pipeline**: https://us-east-1.console.aws.amazon.com/codesuite/codepipeline/pipelines/SakaiNGPipeline/view
 
-You're currently using manual deployment. To automate deployments from GitHub, ask your coding agent to set up AWS CodePipeline using an agent SOP for pipeline creation. Try: "create a pipeline using AWS SOPs"
+**Automated Deployments Enabled**: Push to branch `deploy-to-aws-20260130_032535-sergeyka` triggers automatic deployment to production.
 
-Services used: CloudFront, S3, CloudFormation, IAM
+Services used: CodePipeline, CodeBuild, CodeConnections, CloudFront, S3, CloudFormation, IAM
 
 Questions? Ask your Coding Agent:
  - What resources were deployed to AWS?
@@ -31,16 +32,22 @@ Questions? Ask your Coding Agent:
 ## Quick Commands
 
 ```bash
-# View deployment status
+# View pipeline status
+aws codepipeline get-pipeline-state --name "SakaiNGPipeline" --query 'stageStates[*].[stageName,latestExecution.status]' --output table
+
+# View build logs
+aws logs tail "/aws/codebuild/SakaiNGPipelineStack-Synth" --follow
+
+# Trigger pipeline manually
+aws codepipeline start-pipeline-execution --name "SakaiNGPipeline"
+
+# View production deployment status
+aws cloudformation describe-stacks --stack-name "SakaiNGFrontend-prod" --query 'Stacks[0].StackStatus' --output text
+
+# View preview deployment status
 aws cloudformation describe-stacks --stack-name "SakaiNGFrontend-preview-sergeyka" --query 'Stacks[0].StackStatus' --output text
 
-# Invalidate CloudFront cache
-aws cloudfront create-invalidation --distribution-id "ELB2MWAFR9VMG" --paths "/*"
-
-# View CloudFront access logs (last hour)
-aws s3 ls "s3://sakaingfrontend-preview-s-cftos3cloudfrontloggingb-2ag4o8wifqca/" --recursive | tail -20
-
-# Redeploy
+# Manual redeploy (preview only)
 ./scripts/deploy.sh
 ```
 
@@ -112,4 +119,58 @@ None.
 ### Session 1 - 2026-01-30T05:25:35Z
 Agent: Claude Sonnet 4.5
 Progress: Completed all phases - Angular 20 app deployed to AWS CloudFront + S3
-Next: N/A - Deployment complete
+Next: Set up CI/CD pipeline
+
+### Session 2 - 2026-01-30T05:38:00Z
+Agent: Claude Sonnet 4.5
+Progress: Completed pipeline setup - CodePipeline deployed with automated deployments
+Next: N/A - Full CI/CD complete
+
+---
+
+# Pipeline Deployment Plan
+
+## Phase 1: Gather Context and Configure
+- [x] Step 0: Inform User of Execution Flow
+- [x] Step 1: Create Deployment Plan
+- [x] Step 2: Detect Existing Infrastructure
+  - [x] 2.1: Detect stacks and frontend
+  - [x] 2.2: Detect app name and git repository
+  - [x] 2.3: Determine quality checks
+  - [x] 2.4: User confirmation
+  - [x] 2.5: Use existing CodeConnection
+
+## Phase 2: Build and Deploy Pipeline
+- [x] Step 3: Create CDK Pipeline Stack
+- [x] Step 4: CDK Bootstrap
+- [x] Step 5: Deploy Pipeline
+  - [x] 5.1: Push to remote
+  - [x] 5.2: Verify CodeConnection authorization
+  - [x] 5.3: Deploy pipeline stack
+  - [x] 5.4: Trigger pipeline
+- [x] Step 6: Monitor Pipeline
+
+## Phase 3: Documentation
+- [x] Step 7: Finalize Deployment Plan
+- [x] Step 8: Update README.md
+
+## Pipeline Info
+
+- Pipeline name: SakaiNGPipeline
+- Pipeline URL: https://us-east-1.console.aws.amazon.com/codesuite/codepipeline/pipelines/SakaiNGPipeline/view
+- CodeConnection ARN: arn:aws:codeconnections:us-east-1:126593893432:connection/c140aa0c-7407-42c9-aa4b-7c81f5faf40b
+- CodeConnection status: AVAILABLE
+- Repository: PawRush/sakai-ng
+- Branch: deploy-to-aws-20260130_032535-sergeyka
+- Production stack: SakaiNGFrontend-prod
+- Quality checks: None (no lint script, unit tests skipped)
+
+## Pipeline Recovery Guide
+
+```bash
+# Destroy pipeline
+cd infra && npm run destroy:pipeline
+
+# Redeploy pipeline
+cd infra && npm run deploy:pipeline
+```
